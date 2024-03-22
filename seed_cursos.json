@@ -1,0 +1,29 @@
+[
+  {
+    "model" : "cursos.Curso",
+    "fields": {
+      "nombre": "Curso de Python",
+      "descripcion": "Curso de Python para principiantes",
+      "precio": 100.00,
+      "fecha_publicacion": "2025-01-01"
+    }
+  },
+  {
+    "model" : "cursos.Curso",
+    "fields": {
+      "nombre": "Curso de Java",
+      "descripcion": "Curso de Java para principiantes",
+      "precio": 150.00,
+      "fecha_publicacion": "2025-01-01"
+    }
+  },
+  {
+    "model" : "cursos.Curso",
+    "fields": {
+      "nombre": "Curso de C#",
+      "descripcion": "Curso de C# para principiantes",
+      "precio": 200.00,
+      "fecha_publicacion": "2025-01-01"
+    }
+  }
+]
