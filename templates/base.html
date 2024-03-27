@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+          content="Una plataforma para descubrir los mejores cursos en línea" />
+    <meta name="keywords" content="courses, online, education" />
+    <title>
+      {% block title %}Cursos Argentina{% endblock %}
+    </title>
+    <link rel="shortcut icon"
+          type="image/x-icon"
+          href="{% static 'img/favicon.png' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% block styles %}{% endblock %}
+  </head>
+  <body class="main-body">
+    {% include 'navbar.html' %}
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+    {% include 'footer.html' %}
+  </body>
+</html>
