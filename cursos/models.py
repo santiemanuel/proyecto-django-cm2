@@ -63,5 +63,8 @@ class Inscripcion(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     fecha_inscripcion = models.DateField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ["estudiante", "curso"]
+
     def __str__(self):
         return self.estudiante.nombre + " - " + self.curso.nombre
