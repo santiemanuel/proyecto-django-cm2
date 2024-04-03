@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Curso, Inscripcion
 from datetime import date
+from .forms.curso_form import CursoForm
+from django.shortcuts import redirect
 
 
 def home(request):
@@ -79,6 +81,40 @@ def curso_detail(request, curso_id):
     }
     context = {"curso": curso_data}
     return render(request, "curso/curso_detail.html", context=context)
+
+
+def curso_create(request):
+    if request.method == "POST":
+        form = CursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("curso_list")
+    else:
+        form = CursoForm()
+
+    context = {"titulo": "Nuevo Curso", "form": form, "submit": "Crear Curso"}
+    # Cambiar plantilla a curso_form_bs para ver la versión de Bootstrap
+    return render(request, "curso/curso_form_bs.html", context)
+
+
+def curso_update(request, curso_id):
+    curso = Curso.objects.get(id=curso_id)
+    if request.method == "POST":
+        form = CursoForm(request.POST, instance=curso)
+        if form.is_valid():
+            form.save()
+            return redirect("curso_list")
+    else:
+        form = CursoForm(instance=curso)
+
+    context = {"titulo": "Editar Curso", "form": form, "submit": "Actualizar Curso"}
+    return render(request, "curso/curso_form.html", context)
+
+
+def curso_delete(request, curso_id):
+    curso = Curso.objects.get(id=curso_id)
+    curso.delete()
+    return redirect("curso_list")
 
 
 def error_404(request, exception):
