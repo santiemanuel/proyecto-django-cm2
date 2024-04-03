@@ -1,5 +1,5 @@
 .main-body {
-  background: url(../img/bg2.png) no-repeat center center/cover fixed;
+  background: url(../img/8812359.jpg) no-repeat center center/cover fixed;
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -132,4 +132,19 @@ footer {
   padding: 20px;
   text-align: center;
   box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #2b2065;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #1e184c;
 }
