@@ -30,6 +30,7 @@ class CursoForm(forms.ModelForm):
             "duracion",
             "destacado",
             "estado",
+            "imagen",
         ]
         labels = {
             "nombre": "Nombre del curso",
@@ -41,6 +42,7 @@ class CursoForm(forms.ModelForm):
             "duracion": "Duración",
             "destacado": "Destacado",
             "estado": "Estado",
+            "imagen": "Imagen del Curso",
         }
         help_texts = {
             "duracion": "La duración de la clase está definida en horas/minutos/segundos",
@@ -74,4 +76,5 @@ class CursoForm(forms.ModelForm):
             ),
             "estado": forms.Select(attrs={"class": "form-control"}),
             "destacado": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "imagen": forms.ClearableFileInput(attrs={"class": "form-control"}),
         }

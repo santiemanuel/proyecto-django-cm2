@@ -9,7 +9,7 @@
                 <a href="{% url 'curso_detail' curso.id %}">
                     <img height="100%"
                          width="100%"
-                         src="{% static curso.imagen %}"
+                         src="{{ curso.imagen }}"
                          alt="{{ curso.nombre }}">
                 </a>
                 <div class="card-content">

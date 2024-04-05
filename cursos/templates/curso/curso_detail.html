@@ -2,21 +2,21 @@
 {% load static %}
 {% block title %}Lista de Cursos{% endblock %}
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/course-details.css' %}">
+    <link rel="stylesheet" href="{% static 'cursos/css/course-details.css' %}">
 {% endblock %}
 {% block content %}
     <h1>{{ curso.nombre }}</h1>
     <div class="course-info">
         <img height="100%"
              width="100%"
-             src="{% static curso.imagen %}"
+             src="{{ curso.imagen }}"
              alt="{{ curso.nombre }}">
         <div class="course-details">
             <p class="category">{{ curso.categoria.nombre }}</p>
             <p class="students">{{ curso.num_estudiantes }} estudiantes inscritos</p>
             <p class="duration">Duración del curso: {{ curso.duracion }}</p>
             <p class="price-detail">${{ curso.precio }}</p>
-            <a href="#" class="enroll-now">Inscribirse Ahora</a>
+            <a href="{% url 'inscribir_alumno' curso.id %}" class="enroll-now">Inscribirse Ahora</a>
         </div>
     </div>
     <div class="course-description">
@@ -28,7 +28,7 @@
         {% if curso.instructor %}
             <img height="100%"
                  width="100%"
-                 src="{% static curso.imagen_instructor %}"
+                 src="{{ curso.imagen_instructor }}"
                  alt="{{ curso.instructor.nombre }}">
             <p>{{ curso.instructor.nombre }}</p>
             <p>{{ curso.instructor.bio }}</p>
@@ -41,27 +41,27 @@
         <a href="#"
            class="cta-button me-3"
            data-bs-toggle="modal"
-           data-bs-target="#confirmDeleteModal">Eliminar Curso</a>
+           data-bs-target="#confirmArchiveModal">Archivar Curso</a>
         <a href="{% url 'home' %}" class="cta-button">Regresar</a>
     </div>
     <div class="modal fade"
-         id="confirmDeleteModal"
+         id="confirmArchiveModal"
          tabindex="-1"
-         aria-labelledby="confirmDeleteModalLabel"
+         aria-labelledby="confirmArchiveModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                    <h5 class="modal-title" id="confirmArchiveModalLabel">Confirmar archivado</h5>
                     <button type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body">¿Estás seguro de que deseas eliminar este curso?</div>
+                <div class="modal-body">¿Estás seguro de que deseas archivar este curso?</div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="{% url 'curso_delete' curso.id %}" class="btn btn-danger">Eliminar</a>
+                    <a href="{% url 'curso_archive' curso.id %}" class="btn btn-danger">Archivar</a>
                 </div>
             </div>
         </div>
