@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Lista de Cursos Archivados{% endblock %}
+{% block content %}
+    <h1>Cursos en Estado Archivado</h1>
+    <div class="card-container">
+        {% for curso in cursos %}
+            <div class="card">
+                <img height="100%"
+                        width="100%"
+                        src="{% static curso.imagen %}"
+                        alt="{{ curso.nombre }}">
+                <div class="card-content">
+                    <p class="category">{{ curso.categoria }}</p>
+                    <h3>{{ curso.nombre }}</h3>
+                    <div class="card-footer">
+                        <a class="cta-button" href="{% url 'curso_restore' curso.id %}">Restaurar</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay cursos archivados.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

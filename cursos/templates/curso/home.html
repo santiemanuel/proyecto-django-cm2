@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Cursos Destacados - Inicio{% endblock %}
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+    <link rel="stylesheet" href="{% static 'cursos/css/homepage.css' %}">
 {% endblock %}
 {% block content %}
     <section class="hero">
@@ -51,11 +51,11 @@
                     <a href="{% url 'curso_detail' curso.id %}">
                         <img height="100%"
                              width="100%"
-                             src="{% static curso.imagen %}"
+                             src="{{ curso.imagen }}"
                              alt="{{ curso.nombre }}">
                     </a>
                     <h3>{{ curso.nombre }}</h3>
-                    <p>{{ curso.descripcion|truncatechars:100 }}</p>
+                    <p class="description">{{ curso.descripcion|truncatechars:100 }}</p>
                 </div>
             {% empty %}
                 <p>No hay cursos destacados disponibles.</p>

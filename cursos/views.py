@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Curso, Inscripcion
+from .models import Curso, Inscripcion, Estudiante
 from datetime import date
 from .forms.curso_form import CursoForm
 from django.shortcuts import redirect
+import random
 
 
 def home(request):
@@ -24,7 +25,7 @@ def home(request):
             "id": curso.id,
             "nombre": curso.nombre,
             "descripcion": curso.descripcion,
-            "imagen": f"img/{curso.categoria.color}.png",
+            "imagen": curso.imagen.url,
         }
         cursos_destacados_data.append(curso_data)
 
@@ -39,7 +40,7 @@ def home(request):
 
 
 def curso_list(request):
-    cursos = Curso.objects.select_related("categoria")
+    cursos = Curso.objects.select_related("categoria").filter(estado="publicado")
     cursos_data = []
     for curso in cursos:
         curso_data = {
@@ -51,12 +52,33 @@ def curso_list(request):
             "categoria": curso.categoria.nombre,
             "duracion": curso.duracion,
             "num_estudiantes": curso.estudiantes.count(),
-            "imagen": f"img/{curso.categoria.color}.png",
+            "imagen": curso.imagen.url,
         }
         cursos_data.append(curso_data)
 
     context = {"cursos": cursos_data}
     return render(request, "curso/curso_list.html", context=context)
+
+
+def curso_list_archive(request):
+    cursos = Curso.objects.select_related("categoria").filter(estado="archivado")
+    cursos_data = []
+    for curso in cursos:
+        curso_data = {
+            "id": curso.id,
+            "nombre": curso.nombre,
+            "descripcion": curso.descripcion,
+            "precio": curso.precio,
+            "fecha_publicacion": curso.fecha_publicacion,
+            "categoria": curso.categoria.nombre,
+            "duracion": curso.duracion,
+            "num_estudiantes": curso.estudiantes.count(),
+            "imagen": curso.imagen.url,
+        }
+        cursos_data.append(curso_data)
+
+    context = {"cursos": cursos_data}
+    return render(request, "curso/curso_list_archive.html", context=context)
 
 
 def curso_detail(request, curso_id):
@@ -75,9 +97,9 @@ def curso_detail(request, curso_id):
         "categoria": curso.categoria.nombre,
         "duracion": curso.duracion,
         "num_estudiantes": curso.estudiantes.count(),
-        "imagen": f"img/{curso.categoria.color}.png",
+        "imagen": curso.imagen.url,
         "instructor": curso.instructor,
-        "imagen_instructor": f'img/{curso.instructor.nombre.split(" ")[0]}.png',
+        "imagen_instructor": curso.instructor.avatar.url if curso.instructor else None,
     }
     context = {"curso": curso_data}
     return render(request, "curso/curso_detail.html", context=context)
@@ -85,7 +107,7 @@ def curso_detail(request, curso_id):
 
 def curso_create(request):
     if request.method == "POST":
-        form = CursoForm(request.POST)
+        form = CursoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect("curso_list")
@@ -94,13 +116,13 @@ def curso_create(request):
 
     context = {"titulo": "Nuevo Curso", "form": form, "submit": "Crear Curso"}
     # Cambiar plantilla a curso_form_bs para ver la versión de Bootstrap
-    return render(request, "curso/curso_form_bs.html", context)
+    return render(request, "curso/curso_form.html", context)
 
 
 def curso_update(request, curso_id):
     curso = Curso.objects.get(id=curso_id)
     if request.method == "POST":
-        form = CursoForm(request.POST, instance=curso)
+        form = CursoForm(request.POST, request.FILES, instance=curso)
         if form.is_valid():
             form.save()
             return redirect("curso_list")
@@ -115,6 +137,32 @@ def curso_delete(request, curso_id):
     curso = Curso.objects.get(id=curso_id)
     curso.delete()
     return redirect("curso_list")
+
+
+def curso_archive(request, curso_id):
+    curso = Curso.objects.get(id=curso_id)
+    curso.estado = "archivado"
+    curso.save()
+    return redirect("curso_list")
+
+
+def curso_restore(request, curso_id):
+    curso = Curso.objects.get(id=curso_id)
+    curso.estado = "publicado"
+    curso.save()
+    return redirect("curso_list")
+
+
+def inscribir_alumno(request, curso_id):
+    curso = Curso.objects.get(id=curso_id)
+    estudiantes_sin_inscripcion = Estudiante.objects.exclude(inscripcion__curso=curso)
+    if estudiantes_sin_inscripcion.count() == 0:
+        print("No hay estudiantes sin inscripción")
+        return redirect("curso_detail", curso_id=curso_id)
+    estudiante_elegido = random.choice(estudiantes_sin_inscripcion)
+    inscripcion = Inscripcion(curso=curso, estudiante=estudiante_elegido)
+    inscripcion.save()
+    return redirect("curso_detail", curso_id=curso_id)
 
 
 def error_404(request, exception):
