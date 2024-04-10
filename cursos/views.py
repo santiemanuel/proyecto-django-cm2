@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from .models import Curso, Inscripcion, Estudiante
 from datetime import date
 from .forms.curso_form import CursoForm
+from .forms.estudiante_form import EstudianteForm
 from django.shortcuts import redirect
 import random
+from django.shortcuts import get_object_or_404
 
 
 def home(request):
@@ -163,6 +165,62 @@ def inscribir_alumno(request, curso_id):
     inscripcion = Inscripcion(curso=curso, estudiante=estudiante_elegido)
     inscripcion.save()
     return redirect("curso_detail", curso_id=curso_id)
+
+
+def estudiante_list(request):
+    estudiantes = Estudiante.objects.all()
+    context = {"estudiantes": estudiantes}
+    print(context)
+    template = "estudiante/estudiante_list.html"
+    return render(request, template, context)
+
+
+def estudiante_detail(request, estudiante_id):
+    estudiante = Estudiante.objects.get(id=estudiante_id)
+    inscripciones = estudiante.inscripcion_set.select_related("curso")
+
+    if request.method == "POST":
+        inscripcion_id = request.POST.get("inscripcion_id")
+        inscripcion = get_object_or_404(
+            Inscripcion, id=inscripcion_id, estudiante=estudiante
+        )
+        inscripcion.delete()
+        return redirect("estudiante_detail", estudiante_id=estudiante.id)
+
+    context = {"estudiante": estudiante, "inscripciones": inscripciones}
+
+    return render(request, "estudiante/estudiante_detail.html", context)
+
+
+def create_estudiante(request):
+    if request.method == "POST":
+        form = EstudianteForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("estudiante_list")
+    else:
+        form = EstudianteForm()
+
+    context = {"form": form, "submit": "Crear Estudiante", "titulo": "Nuevo Estudiante"}
+    return render(request, "estudiante/estudiante_form.html", context)
+
+
+def update_estudiante(request, estudiante_id):
+    estudiante = Estudiante.objects.get(id=estudiante_id)
+    if request.method == "POST":
+        form = EstudianteForm(request.POST, request.FILES, instance=estudiante)
+        if form.is_valid():
+            form.save()
+            return redirect("estudiante_list")
+    else:
+        form = EstudianteForm(instance=estudiante)
+
+    context = {
+        "form": form,
+        "submit": "Actualizar Estudiante",
+        "titulo": "Editar Estudiante",
+    }
+    return render(request, "estudiante/estudiante_form.html", context)
 
 
 def error_404(request, exception):
