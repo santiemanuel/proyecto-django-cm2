@@ -119,7 +119,7 @@ def curso_create(request):
 
     context = {"titulo": "Nuevo Curso", "form": form, "submit": "Crear Curso"}
     # Cambiar plantilla a curso_form_bs para ver la versión de Bootstrap
-    return render(request, "curso/curso_form.html", context)
+    return render(request, "curso/curso_form_bs.html", context)
 
 
 def curso_update(request, curso_id):
@@ -133,7 +133,7 @@ def curso_update(request, curso_id):
         form = CursoForm(instance=curso)
 
     context = {"titulo": "Editar Curso", "form": form, "submit": "Actualizar Curso"}
-    return render(request, "curso/curso_form.html", context)
+    return render(request, "curso/curso_form_bs.html", context)
 
 
 def curso_delete(request, curso_id):
