@@ -94,6 +94,7 @@ def curso_detail(request, curso_id):
         "id": curso.id,
         "nombre": curso.nombre,
         "descripcion": curso.descripcion,
+        "contenido": curso.contenido,
         "precio": curso.precio,
         "fecha_publicacion": curso.fecha_publicacion,
         "categoria": curso.categoria.nombre,

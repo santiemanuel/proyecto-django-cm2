@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import timedelta
 from django.core.exceptions import ValidationError
+from tinymce.models import HTMLField
 
 
 class Estudiante(models.Model):
@@ -40,7 +41,8 @@ def precio_positivo(value):
 
 class Curso(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion = models.CharField(max_length=100)
+    contenido = HTMLField(default="")
     precio = models.IntegerField(validators=[precio_positivo])
     fecha_publicacion = models.DateField()
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
