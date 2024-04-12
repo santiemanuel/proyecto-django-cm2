@@ -16,6 +16,19 @@ urlpatterns = [
         views.inscribir_alumno,
         name="inscribir_alumno",
     ),
+    # Urls de estudiantes
+    path("estudiantes/", views.estudiante_list, name="estudiante_list"),
+    path(
+        "estudiantes/<int:estudiante_id>/",
+        views.estudiante_detail,
+        name="estudiante_detail",
+    ),
+    path("estudiantes/crear/", views.create_estudiante, name="create_estudiante"),
+    path(
+        "estudiantes/<int:estudiante_id>/editar",
+        views.update_estudiante,
+        name="update_estudiante",
+    ),
 ]
 
 handler404 = "cursos.views.error_404"

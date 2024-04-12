@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Lista de Estudiantes</h1>
+        <a href="{% url 'create_estudiante' %}" class="cta-button">Crear Estudiante</a>
+    </div>
+    <div class="row">
+        {% for estudiante in estudiantes %}
+        <div class="col-4 mb-4">
+            <div class="card">
+                <img src="{{ estudiante.avatar.url }}" alt="{{ estudiante.nombre }}" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">{{ estudiante.nombre }}</h5>
+                    <p class="card-text">Cursos realizando: {{ estudiante.curso_set.count }}</p>
+                    <a href="{% url 'estudiante_detail' estudiante.id %}" class="cta-button">Ver Perfil</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No hay estudiantes registrados.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

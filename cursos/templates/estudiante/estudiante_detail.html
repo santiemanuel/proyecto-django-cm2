@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Perfil de {{ estudiante.nombre }}</h1>
+    <div class="row">
+        <div class="col-4">
+          <div class="profile-image-container">
+              <img src="{{ estudiante.avatar.url }}" alt="{{ estudiante.nombre }}" class="img-fluid profile-image">
+          </div>
+        </div>
+        <div class="col-8">
+            <h3>Información del Estudiante</h3>
+            <p><strong>Nombre:</strong> {{ estudiante.nombre }}</p>
+            <p><strong>Email:</strong> {{ estudiante.email }}</p>
+            <hr>
+            <h3>Cursos Realizando</h3>
+            <ul class="list-group">
+                {% for inscripcion in inscripciones %}
+                  <li class="list-group-item d-flex align-items-center">
+                      <a href="{% url 'curso_detail' inscripcion.curso.id %}">
+                        <img src="{{ inscripcion.curso.imagen.url }}" alt="{{ inscripcion.curso.nombre }}" class="img-fluid me-3" width="100">
+                      </a>
+                      <div class="d-flex flex-column align-items-start">
+                          <h5>{{ inscripcion.curso.nombre }}</h5>
+                          <p>{{ inscripcion.curso.descripcion }}</p>
+                      </div>
+                      <form class="ms-auto" method="post" action="{% url 'estudiante_detail' estudiante.id %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="inscripcion_id" value="{{ inscripcion.id }}">
+                          <button type="submit" class="cta-button">Dar de Baja</button>
+                      </form>
+                  </li>
+                {% empty %}
+                  <p>No está realizando ningún curso.</p>
+                {% endfor %}
+            </ul>
+            <div class="d-flex justify-content-end pt-4">
+              <a href="{% url 'update_estudiante' estudiante.id %}" class="cta-button me-3">Actualizar Datos</a>
+              <a href="{% url 'estudiante_list' %}" class="cta-button">Regresar</a>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
