@@ -90,6 +90,8 @@ def curso_detail(request, curso_id):
         .get(id=curso_id)
     )
 
+    destino = request.GET.get("next", "home")
+
     curso_data = {
         "id": curso.id,
         "nombre": curso.nombre,
@@ -104,7 +106,7 @@ def curso_detail(request, curso_id):
         "instructor": curso.instructor,
         "imagen_instructor": curso.instructor.avatar.url if curso.instructor else None,
     }
-    context = {"curso": curso_data}
+    context = {"curso": curso_data, "destino": destino}
     return render(request, "curso/curso_detail.html", context=context)
 
 

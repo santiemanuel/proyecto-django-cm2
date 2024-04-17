@@ -6,7 +6,7 @@
     <div class="card-container">
         {% for curso in cursos %}
             <div class="card">
-                <a href="{% url 'curso_detail' curso.id %}">
+                <a href="{% url 'curso_detail' curso.id %}?next=/cursos/">
                     <img height="100%"
                          width="100%"
                          src="{{ curso.imagen }}"

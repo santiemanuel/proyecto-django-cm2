@@ -42,7 +42,12 @@
            class="cta-button me-3"
            data-bs-toggle="modal"
            data-bs-target="#confirmArchiveModal">Archivar Curso</a>
-        <a href="{% url 'home' %}" class="cta-button">Regresar</a>
+
+        {% if destino == '/' %}
+            <a href="{% url 'home' %}" class="cta-button">Regresar</a>
+        {% elif destino == '/cursos/' %}
+            <a href="{% url 'curso_list' %}" class="cta-button">Regresar</a>
+        {% endif %}
     </div>
     <div class="modal fade"
          id="confirmArchiveModal"
