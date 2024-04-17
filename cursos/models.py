@@ -11,6 +11,11 @@ class Estudiante(models.Model):
         upload_to="estudiantes", default="estudiantes/fallback.png", blank=True
     )
 
+    def save(self, *args, **kwargs):
+        if not self.avatar:
+            self.avatar = "estudiantes/fallback.png"
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.nombre
 
