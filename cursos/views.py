@@ -160,7 +160,6 @@ def inscribir_alumno(request, curso_id):
     curso = Curso.objects.get(id=curso_id)
     estudiantes_sin_inscripcion = Estudiante.objects.exclude(inscripcion__curso=curso)
     if estudiantes_sin_inscripcion.count() == 0:
-        print("No hay estudiantes sin inscripción")
         return redirect("curso_detail", curso_id=curso_id)
     estudiante_elegido = random.choice(estudiantes_sin_inscripcion)
     inscripcion = Inscripcion(curso=curso, estudiante=estudiante_elegido)
@@ -171,7 +170,6 @@ def inscribir_alumno(request, curso_id):
 def estudiante_list(request):
     estudiantes = Estudiante.objects.all()
     context = {"estudiantes": estudiantes}
-    print(context)
     template = "estudiante/estudiante_list.html"
     return render(request, template, context)
 
